@@ -7,6 +7,7 @@ import (
 	"os"
 	"regexp"
 	"strconv"
+	"strings"
 )
 
 func main() {
@@ -45,13 +46,30 @@ func ReadInput() *[]string {
 }
 
 func FilterDigits(input *[]string) {
-	expression := regexp.MustCompile("[0-9]")
-
 	var total int64
 
-	for _, value := range *input {
-		digits := expression.FindAllString(value, -1)
-		outerDigits := digits[0] + digits[len(digits)-1]
+	var mapping = map[string]string{
+		"one":   "o1ne",
+		"two":   "t2wo",
+		"three": "th3ree",
+		"four":  "fo4ur",
+		"five":  "fi5ve",
+		"six":   "si6x",
+		"seven": "sev7en",
+		"eight": "eig8ht",
+		"nine":  "ni9ne",
+	}
+
+	var expression = regexp.MustCompile("[0-9]")
+
+	for _, inputLine := range *input {
+		for k, v := range mapping {
+			inputLine = strings.Replace(inputLine, k, v, -1)
+		}
+
+		convertedLine := expression.FindAllString(inputLine, -1)
+
+		outerDigits := convertedLine[0] + convertedLine[len(convertedLine)-1]
 		decimalValue, _ := strconv.ParseInt(outerDigits, 10, 64)
 		total += decimalValue
 	}
