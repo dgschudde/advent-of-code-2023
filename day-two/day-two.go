@@ -17,10 +17,6 @@ type Game struct {
 	Green []int
 }
 
-const MaxRed int = 12
-const MaxGreen int = 13
-const MaxBlue int = 14
-
 func main() {
 	var input *[]string
 	var games *[]Game
@@ -28,7 +24,7 @@ func main() {
 	input = ReadInput()
 	games = ConvertInput(input)
 
-	var total int64
+	var total int
 
 	for _, game := range *games {
 		sort.Ints(game.Red)
@@ -40,9 +36,8 @@ func main() {
 		sort.Ints(game.Green)
 		maxGreen := game.Green[len(game.Green)-1]
 
-		if maxRed <= MaxRed && maxBlue <= MaxBlue && maxGreen <= MaxGreen {
-			total += game.Id
-		}
+		amount := maxGreen * maxBlue * maxRed
+		total += amount
 	}
 	fmt.Println(total)
 }
