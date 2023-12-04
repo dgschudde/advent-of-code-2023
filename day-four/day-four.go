@@ -4,6 +4,7 @@ import (
 	"bufio"
 	"fmt"
 	"log"
+	"math"
 	"os"
 	"slices"
 	"strconv"
@@ -24,30 +25,25 @@ func main() {
 }
 
 func PartOne() {
-	var totalPoints int
+	var totalPoints float64
 	for game, cards := range playCards {
-		var points = 0
 		match := 0
 		for _, card := range cards {
 			if slices.Contains(winningCards[game], card) {
 				match++
-				if match == 1 {
-					points = 1
-				} else {
-					points *= 2
-				}
-
 			}
 		}
-		totalPoints += points
+		if match > 0 {
+			totalPoints += math.Pow(2, float64(match)-1)
+		}
 	}
-	fmt.Printf("Total points: %d\r\n", totalPoints)
+	fmt.Printf("Total: %f\r\n", totalPoints)
 }
 
 func ReadInput() *[]string {
 	var input = make([]string, 0)
 
-	inputFile, err := os.Open("input/input.txt")
+	inputFile, err := os.Open("input/test-input.txt")
 
 	if err != nil {
 		log.Fatal(err)
@@ -92,7 +88,6 @@ func ParseInput(input *[]string) {
 				value, _ := strconv.ParseInt(item, 10, 64)
 				winningCardsLine = append(winningCardsLine, int(value))
 			}
-
 		}
 		winningCards = append(winningCards, winningCardsLine)
 	}
